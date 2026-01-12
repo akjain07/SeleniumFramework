@@ -6,10 +6,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+
+import pageObjects.CartPage;
+import pageObjects.CheckoutPage;
+import pageObjects.ConfirmationPage;
+import pageObjects.LandingPage;
+import pageObjects.ProductCatalogue;
 
 public class StandaloneCase {
 
@@ -27,78 +32,42 @@ public class StandaloneCase {
 
 		String productName = "ZARA COAT 3";
 
-		driver.get("https://rahulshettyacademy.com/client/#/auth/login");
+		LandingPage landingPage = new LandingPage(driver);
+		
+		landingPage.launchLandingPage();
 
-		driver.findElement(By.cssSelector("input[type='email']")).sendKeys("ankitjain@gmail.com");
+		ProductCatalogue proCatalogue=landingPage.loginApplication("ankitjain@gmail.com", "AnkitJain");
 
-		driver.findElement(By.id("userPassword")).sendKeys("AnkitJain");
-
-		driver.findElement(By.cssSelector("#login")).click();
-
-//		traditional way to print the name
-//		List<WebElement> products = driver.findElements(By.cssSelector("div.card-body h5 b"));
-//
-//		for (WebElement pro : products) {
-//			System.out.println(pro.getText());
-//		}
-
-//         Wait for products to load
-		wt.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".mb-3")));
+		List<WebElement> products = proCatalogue.getProductList();
 
 //      Wait for all animations to stop
 		wt.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".ng-animating")));
 
-//      Re-locate product fresh from DOM
-		List<WebElement> products = driver.findElements(By.cssSelector(".mb-3"));
-
 //		finding ZARA COAT 3 product
-		WebElement prod = products.stream()
-				.filter(product -> product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst()
-				.orElse(null);
-
-		// Re-locate button JUST before clicking
-		WebElement addToCart = prod.findElement(By.cssSelector(".card-body button:last-of-type"));
-
-		// Real user click
-		Actions actions = new Actions(driver);
-		actions.moveToElement(addToCart).pause(Duration.ofMillis(200)).click().perform();
-
-//		waiting for toast pop-up to appear before moving to cart page
-		wt.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
-
-//		waiting for blank screen to disappear
-		wt.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".ng-animating")));
-
-//		Cart Icon
-		WebElement cartIcon = driver.findElement(By.cssSelector("button[routerlink*='cart']"));
-
-//		Clicking on Cart button
-		actions.moveToElement(cartIcon).pause(Duration.ofMillis(200)).click().perform();
-
-//		products items on cart page
-		List<WebElement> cartProducts = driver.findElements(By.cssSelector(".cartSection h3"));
+		WebElement prod = proCatalogue.getProductByName(productName);
 		
-		boolean match = cartProducts.stream().anyMatch(produ->produ.getText().equalsIgnoreCase(productName));
+		proCatalogue.addProductToCart(productName);
 		
+		CartPage cartPage=proCatalogue.goToCartPage();
+	
+		boolean match =cartPage.verifyProductDisplay(productName);
+
 		Assert.assertTrue(match);
-		
+
 //		Clicking on Checkout button
-		driver.findElement(By.cssSelector(".totalRow button")).click();
+		CheckoutPage checkoutPage =cartPage.goToCheckout();
 		
-		actions.sendKeys(driver.findElement(By.cssSelector("input[placeholder='Select Country']")), "india").build().perform();
+		checkoutPage.selectCountry("india");
 		
-//		Adding wait to let the countries options loaded
-		wt.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results")));
-		
-		driver.findElement(By.cssSelector(".ta-item:nth-child(3)")).click();
-		
+		ConfirmationPage confirmPage = checkoutPage.submitOrder();
+
 //		Clicking the Place Order button
-		driver.findElement(By.cssSelector("a.ng-star-inserted")).click();
-		
-		String confirmMsg=driver.findElement(By.cssSelector(".hero-primary")).getText();
-		
+		checkoutPage.submitOrder();
+
+		String confirmMsg = confirmPage.getMsg();
+
 		Assert.assertTrue(confirmMsg.equalsIgnoreCase("Thankyou for the order."));
-		
+
 		driver.quit();
 
 	}
