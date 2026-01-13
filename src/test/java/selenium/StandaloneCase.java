@@ -1,74 +1,54 @@
 package selenium;
 
-import java.time.Duration;
-import java.util.List;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import java.io.IOException;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import pageObjects.CartPage;
 import pageObjects.CheckoutPage;
 import pageObjects.ConfirmationPage;
-import pageObjects.LandingPage;
+import pageObjects.OrderPage;
 import pageObjects.ProductCatalogue;
+import testComponents.BaseTest;
 
-public class StandaloneCase {
+public class StandaloneCase extends BaseTest {
 
-	public static void main(String[] args) throws InterruptedException {
+	String productName = "ZARA COAT 3";
 
-		WebDriver driver = new ChromeDriver();
+	@Test
+	public void submitOrder() throws IOException {
 
-		driver.manage().deleteAllCookies();
+		ProductCatalogue proCatalogue = landingPage.loginApplication("ankitjain@gmail.com", "AnkitJain");
 
-		driver.manage().window().maximize();
-
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-
-		WebDriverWait wt = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-		String productName = "ZARA COAT 3";
-
-		LandingPage landingPage = new LandingPage(driver);
-		
-		landingPage.launchLandingPage();
-
-		ProductCatalogue proCatalogue=landingPage.loginApplication("ankitjain@gmail.com", "AnkitJain");
-
-		List<WebElement> products = proCatalogue.getProductList();
-
-//      Wait for all animations to stop
-		wt.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".ng-animating")));
-
-//		finding ZARA COAT 3 product
-		WebElement prod = proCatalogue.getProductByName(productName);
-		
+//		finding ZARA COAT 3 product		
 		proCatalogue.addProductToCart(productName);
-		
-		CartPage cartPage=proCatalogue.goToCartPage();
-	
-		boolean match =cartPage.verifyProductDisplay(productName);
+
+		CartPage cartPage = proCatalogue.goToCartPage();
+
+		boolean match = cartPage.verifyProductDisplay(productName);
 
 		Assert.assertTrue(match);
 
 //		Clicking on Checkout button
-		CheckoutPage checkoutPage =cartPage.goToCheckout();
-		
+		CheckoutPage checkoutPage = cartPage.goToCheckout();
+
 		checkoutPage.selectCountry("india");
-		
-		ConfirmationPage confirmPage = checkoutPage.submitOrder();
 
 //		Clicking the Place Order button
-		checkoutPage.submitOrder();
+		ConfirmationPage confirmPage = checkoutPage.submitOrder();
 
 		String confirmMsg = confirmPage.getMsg();
 
 		Assert.assertTrue(confirmMsg.equalsIgnoreCase("Thankyou for the order."));
 
-		driver.quit();
+	}
+
+//	to verify that the Product we placed is available in Order History or not
+	@Test(dependsOnMethods = { "submitOrder" })
+	public void OrderHistoryTest() {
+		ProductCatalogue proCatalogue = landingPage.loginApplication("ankitjain@gmail.com", "AnkitJain");
+		OrderPage orderPage = proCatalogue.goToOrderPage();
+		Assert.assertTrue(orderPage.verifyOrderDisplay(productName));
 
 	}
 
