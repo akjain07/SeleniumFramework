@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="0" passed="0" failed="0" skipped="0">
+<testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-01-13T19:21:45 IST" name="Suite" finished-at="2026-01-13T19:21:45 IST" duration-ms="13">
+  <suite started-at="2026-01-14T18:24:17 IST" name="Suite" finished-at="2026-01-14T18:24:49 IST" duration-ms="31294">
     <groups>
+      <group name="Purchase">
+        <method signature="StandaloneCase.submitOrder(java.util.HashMap)[pri:0, instance:seleniumTests.StandaloneCase@7b2bbc3]" name="submitOrder" class="seleniumTests.StandaloneCase"/>
+      </group> <!-- Purchase -->
     </groups>
-    <test started-at="2026-01-13T19:21:45 IST" name="Standalone" finished-at="2026-01-13T19:21:45 IST" duration-ms="13">
+    <test started-at="2026-01-14T18:24:17 IST" name="Error Validations" finished-at="2026-01-14T18:24:17 IST" duration-ms="14">
+    </test> <!-- Error Validations -->
+    <test started-at="2026-01-14T18:24:17 IST" name="Standalone" finished-at="2026-01-14T18:24:49 IST" duration-ms="31294">
+      <class name="seleniumTests.StandaloneCase">
+        <test-method is-config="true" signature="launchApplication()[pri:0, instance:seleniumTests.StandaloneCase@7b2bbc3]" started-at="2026-01-14T18:24:18 IST" name="launchApplication" finished-at="2026-01-14T18:24:20 IST" duration-ms="2481" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- launchApplication -->
+        <test-method signature="submitOrder(java.util.HashMap)[pri:0, instance:seleniumTests.StandaloneCase@7b2bbc3]" started-at="2026-01-14T18:24:20 IST" name="submitOrder" data-provider="getData" finished-at="2026-01-14T18:24:32 IST" duration-ms="11929" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{password=AnkitJain, email=ankitjain@gmail.com, productName=ZARA COAT 3}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- submitOrder -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:seleniumTests.StandaloneCase@7b2bbc3]" started-at="2026-01-14T18:24:32 IST" name="tearDown" finished-at="2026-01-14T18:24:32 IST" duration-ms="409" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="launchApplication()[pri:0, instance:seleniumTests.StandaloneCase@7b2bbc3]" started-at="2026-01-14T18:24:32 IST" name="launchApplication" finished-at="2026-01-14T18:24:34 IST" duration-ms="1602" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- launchApplication -->
+        <test-method signature="submitOrder(java.util.HashMap)[pri:0, instance:seleniumTests.StandaloneCase@7b2bbc3]" started-at="2026-01-14T18:24:34 IST" name="submitOrder" data-provider="getData" finished-at="2026-01-14T18:24:47 IST" duration-ms="12654" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{password=Vartika@123, email=vartikajain@gmail.com, productName=ADIDAS ORIGINAL}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- submitOrder -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:seleniumTests.StandaloneCase@7b2bbc3]" started-at="2026-01-14T18:24:47 IST" name="tearDown" finished-at="2026-01-14T18:24:49 IST" duration-ms="1903" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- seleniumTests.StandaloneCase -->
     </test> <!-- Standalone -->
   </suite> <!-- Suite -->
 </testng-results>
