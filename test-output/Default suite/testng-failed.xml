@@ -5,9 +5,9 @@
     <classes>
       <class name="seleniumTests.StandaloneCase">
         <methods>
-          <include name="launchApplication"/>
           <include name="OrderHistoryTest"/>
-          <include name="submitOrder"/>
+          <include name="launchApplication"/>
+          <include name="submitOrder" invocation-numbers="1"/>
           <include name="tearDown"/>
         </methods>
       </class> <!-- seleniumTests.StandaloneCase -->
